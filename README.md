@@ -3,7 +3,7 @@
 ## Overview
 
 This repository contains the initial structure and documentation for the project in CSC 581.
-The goal of this projext is to design and deploy a multi-component system using containerized servicesthat can be executed in a CloudLab environment.
+The goal of this project is to design and deploy a multi-component system using containerized services that can be executed in a CloudLab environment.
 
 The repository is organized to support reproducible experiments, clear documentation, and future automation for CloudLab deployments.
 
@@ -17,7 +17,7 @@ The proposed system consists of two containerized components that communicate ov
 A lightweight client application responsible for sending requests and displaying responses.
 
 ### Component 2 - Backend API Service
-A backend service responsible for procewssing requests and returning data through a RESTful interface.
+A backend service responsible for processing requests and returning data through a RESTful interface.
 
 The two components will communicate using HTTP REST APIs.
 
@@ -32,7 +32,7 @@ The two components will communicate using HTTP REST APIs.
 
 ## Proposal
 
-The system will be omplementing using Docker containers to ensure portability and compatibility with CloudLab nodes.
+The system will be implementing using Docker containers to ensure portability and compatibility with CloudLab nodes.
 
 ## Planned Base Images
 
@@ -64,7 +64,7 @@ csc581_project1/
 This repository is structured to support deployment in CloudLab by:
 
 - Separating system components into independent services
-- Preparing space for autmation scripts
+- Preparing space for automation scripts
 - Providing clear documentation for reproducibility
 - Supporting container-base deployment
 
