@@ -8,5 +8,5 @@ class Handler(BaseHTTPRequestHandler):
     self.wfile.write(b"Hello from component1 (Python backend)!")
 
 server = HTTPServer(("0.0.0.0", 8000), Handler)
-print("component1 running on port 8000)
+print("component1 running on port 8000")
 server.serve_forever()
