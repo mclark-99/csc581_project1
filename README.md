@@ -78,11 +78,11 @@ This repository includes a minimal two-container setup that can be launched on a
 
 ```bash
 bash scripts/setup-cloudlab.sh
-
+```
 4. Build and start the containers:
 ```bash
 docker compose up --build
-
+```
 ---
 
 ## Author
