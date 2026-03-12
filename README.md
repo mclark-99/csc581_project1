@@ -61,14 +61,23 @@ csc581_project1/
 
 ## CloudLab Readiness
 
-This repository is structured to support deployment in CloudLab by:
+This repository includes a minimal two-container setup that can be launched on a CloudLab Ubuntu node.
 
-- Separating system components into independent services
-- Preparing space for automation scripts
-- Providing clear documentation for reproducibility
-- Supporting container-base deployment
+### Files added for CloudLab readiness
+- `component1/Dockerfile`
+- `component1/app.py`
+- `component2/Dockerfile`
+- `component2/app.js`
+- `docker-compose.yml`
+- `scripts/setup-cloudlab.sh`
 
-Future deliverables will include setup scripts and CloudLab-specific configuration files.
+### How to run
+1. Launch an Ubuntu-based CloudLab node.
+2. Clone this repository.
+3. Run the setup script:
+
+```bash
+bash scripts/setup-cloudlab.sh
 
 ---
 
