@@ -1,0 +1,14 @@
+services:
+  component1:
+    build: ./component1
+    container_name: component1
+    ports:
+      - "8000:8000"
+
+  component2:
+    build: ./component2
+    container_name: component2
+    ports:
+      - "3000:3000"
+    depends_on:
+      - component1
