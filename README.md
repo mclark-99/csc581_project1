@@ -81,14 +81,9 @@ bash scripts/setup-cloudlab.sh
 ```
 4. Build and start the containers:
 ```bash
+git clone https://github.com/mclark-99/csc581_project1.git
+cd csc581_project1
 docker compose up --build
-```
-## Testing on CloudLab
-
-After cloning the repository on a CloudLab Ubuntu node:
-
-```bash
-docker-compose up --build
 ```
 
 Verify the services:
