@@ -83,7 +83,30 @@ bash scripts/setup-cloudlab.sh
 ```bash
 docker compose up --build
 ```
+## Testing on CloudLab
+
+After cloning the repository on a CloudLab Ubuntu node:
+
+```bash
+docker-compose up --build
+```
+
+Verify the services:
+
+```bash
+curl localhost:8000
+curl localhost:3000
+```
+
+Expected responses:
+
+```bash
+Hello from component1 (Python backend)!
+Hello from component2 (Node client/service)!
+```
+
 ---
+
 
 ## Author
 
