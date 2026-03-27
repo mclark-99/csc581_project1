@@ -32,7 +32,9 @@ The two components will communicate using HTTP REST APIs.
 
 ## Proposal
 
-The system will be implementing using Docker containers to ensure portability and compatibility with CloudLab nodes.
+This project implements a simple multi-component application using Docker containers to demonstrate containerization, service isolation, and inter-service communication.
+
+The system follows a client-server architecture, where a lightweight Node.js client (component2) interacts with a Python-based backend API (component1) over HTTP. Each component is containerized independently, allowing them to run in isolated environments while still communicating through a shared Docker network.
 
 ## Build Process
 
@@ -41,53 +43,25 @@ This project uses two Dockerfiles, one for each containerized component.
 ### Component 1 (Backend API - Python)
 
 ```dockerfile
-FROM python:3.11-slim
-WORKDIR /app
-COPY app.py .
-EXPOSE 8000
-CMD ["python", "app.py"]
+FROM python:3.11-slim        # uses a lightweight Python image to reduce size and improve startup time.
+WORKDIR /app                 # sets the working directory inside the container.
+COPY app.py .                # copies the backend application into the container.
+EXPOSE 8000                  # documents that the container listens on port 8000.
+CMD ["python", "app.py"]     # starts the backend server when the container runs.
 ```
-From python:3.11-slim
-- uses a lightweight Python imafe to reduce size and improve startup time.
-
-WORKDIR /app
-- sets the working directory inside the container.
-
-COPY app.py .
-- copies the backend application into the container.
-
-EXPOSE 8000
-- indicates the container listens on port 8000.
-
-CMD ["python", "app.py"]
-- starts the backedn server when the container runs.
 
 ### Component 2 (Clientt Service - Node.js)
 
 ```dockerfile
-FROM node:20-alpine
-WORKDIR /app
-COPY app.js .
-EXPOSE 3000
-CMD ["node", "app.js"]
+FROM node:20-alpine        # uses a minimal Node.js image for efficiency.
+WORKDIR /app               # sets the working directory inside the container.
+COPY app.js .              # copies the client service code into the contaniner.
+EXPOSE 3000                # documents that the service runs on port 3000.
+CMD ["node", "app.js"]     # starts the Node.js service when the container runs.
 ```
-FROM node:20-alpine
-- uses a minimal NODE.js image for efficiency.
-
-WORKDIR /app
-- sets the working directory.
-
-COPY app.js .
-- copies the client service code.
-
-EXPOSE 3000
-- indicates the service runs on port 3000.
-
-CMD ["node", "app.js"]
-- starts the Node.js service.
 
 ## Base Image Justification
-The selected images (pythin:3.11-slim and node:20-alpine) were chose for:
+The selected images (python:3.11-slim and node:20-alpine) were chose for:
 - small size (faster builds and deployment)
 - compatibility woth CoudLab
 - reduced resource usage
@@ -129,16 +103,6 @@ This allows testing using:
 curl localhost:8000
 curl localhost:3000
 ```
-
-## Planned Base Images
-
-- CLient Service: Node.js
-- Backend API Service: Python
-
-These base images were selected for their lightweight footprint, fast startup time, and strong community support.
-
-Containerization will allow each component to run independently while maintaining consistent runtime enironments across CloudLab experiments.
-
 ---
 
 ## Repository Structure
@@ -187,23 +151,23 @@ This repository includes a minimal two-container setup that can be launched on a
 ```bash
 git clone https://github.com/mclark-99/csc581_project1.git
 ```
-4. cd into project folder
+3. cd into project folder
 ```bash
 cd csc581_project1
 ls
 ```
 
-5.  Run the setup script:
+4.  Run the setup script:
 
 ```bash
 bash scripts/setup-cloudlab.sh
 ```
-4. Build and start the containers:
+5. Build and start the containers:
 ```bash
 sudo docker-compose up --build
 ```
 
-Verify the services:
+6. Verify the services:
 
 ```bash
 curl localhost:8000
