@@ -12,4 +12,4 @@ sudo usermod -aG docker $USER
 
 echo "Setup complete."
 echo "If dicker permission is denied, log out and back in, then run:"
-echo "docker compose up --build"
+echo "docker-compose up --build"
