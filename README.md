@@ -146,11 +146,25 @@ Containerization will allow each component to run independently while maintainin
 ```
 csc581_project1/
 |
-|-- component1/ # Client service container
-|-- docs/diagrams/ # Architecture and system diagrams
-|-- resume/ # Professional resume
-|-- scripts/ # Setup and automation scripts (future)
-|__ README.md # Project Documentation
+|-- component1/         # Backend API
+|  |-- Dockerfile
+|  |-- README.md
+|  |__ app.py
+|
+|-- component2/         # Client Service
+|  |-- Dockerfile
+|  |-- README.md
+|  |__ app.js
+|
+|-- docs/
+|  |__diagramls/       # Architecture and system diagrams
+|
+|-- resume/            # Professional resume
+|
+|-- scripts/           # Setup and automation scripts
+|  |__ setup-cloudlab.sh
+|
+|__ README.md         # Project Documentation
 ```
 
 ---
@@ -186,8 +200,7 @@ bash scripts/setup-cloudlab.sh
 ```
 4. Build and start the containers:
 ```bash
-cd csc581_project1
-docker-compose up --build
+sudo docker-compose up --build
 ```
 
 Verify the services:
