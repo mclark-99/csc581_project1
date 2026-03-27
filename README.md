@@ -5,7 +5,7 @@
 This repository contains the initial structure and documentation for the project in CSC 581.
 The goal of this project is to design and deploy a multi-component system using containerized services that can be executed in a CloudLab environment.
 
-The repository is organized to support reproducible experiments, clear documentation, and future automation for CloudLab deployments.
+The repository is organized to support reproducible experiments, clear documentation, and future automation for CloudLab deployments. This project follows a “Static Site + API” style architecture, where a client-facing service interacts with a backend API.
 
 ---
 
@@ -22,17 +22,113 @@ A backend service responsible for processing requests and returning data through
 The two components will communicate using HTTP REST APIs.
 
 ### Architecture Diagram
-
-+-------------------+ HTTP REST +-------------------+
-| Client Service | --------------> | Backend API Service |
-| (Container 1) || (Container 2) |
-+-------------------+ +-------------------+
-
+```
++---------------------+        HTTP REST        +----------------------+
+|   Client Service    |  -------------------->  |   Backend API        |
+|   (component2)      |                         |   (component1)       |
++---------------------+                         +----------------------+
+```
 ---
 
 ## Proposal
 
 The system will be implementing using Docker containers to ensure portability and compatibility with CloudLab nodes.
+
+## Build Process
+
+This project uses two Dockerfiles, one for each containerized component.
+
+### Component 1 (Backend API - Python)
+
+```dockerfile
+FROM python:3.11-slim
+WORKDIR /app
+COPY app.py .
+EXPOSE 8000
+CMD ["python", "app.py"]
+```
+From python:3.11-slim
+- uses a lightweight Python imafe to reduce size and improve startup time.
+
+WORKDIR /app
+- sets the working directory inside the container.
+
+COPY app.py .
+- copies the backend application into the container.
+
+EXPOSE 8000
+- indicates the container listens on port 8000.
+
+CMD ["python", "app.py"]
+- starts the backedn server when the container runs.
+
+### Component 2 (Clientt Service - Node.js)
+
+```dockerfile
+FROM node:20-alpine
+WORKDIR /app
+COPY app.js .
+EXPOSE 3000
+CMD ["node", "app.js"]
+```
+FROM node:20-alpine
+- uses a minimal NODE.js image for efficiency.
+
+WORKDIR /app
+- sets the working directory.
+
+COPY app.js .
+- copies the client service code.
+
+EXPOSE 3000
+- indicates the service runs on port 3000.
+
+CMD ["node", "app.js"]
+- starts the Node.js service.
+
+## Base Image Justification
+The selected images (pythin:3.11-slim and node:20-alpine) were chose for:
+- small size (faster builds and deployment)
+- compatibility woth CoudLab
+- reduced resource usage
+- strong community support
+
+---
+
+## Networking
+
+Docker Compose creates a defaut bridge network that allows the containers to communicate with each other.
+
+### Communication
+
+- component1 (backend) runs on port 8000
+- component2 (client) runs on port 3000
+
+Both containers are connected to the same internal Docker network.
+
+### DNS Resolution
+
+Docker automatically provides DNS resolution using service names.
+
+This means:
+- `component1` can be accessed using hostname `component1`
+- `component2` can be accessed using hostname `component2`
+
+This removes the need for hardcoded IP addresses/
+
+### Port Mapping
+
+Ports are exposed to the CloudLab host:
+
+- `8000:8000` -> backend API
+- `3000:3000` -> client service
+
+This allows testing using:
+
+```bash
+curl localhost:8000
+curl localhost:3000
+```
 
 ## Planned Base Images
 
@@ -74,16 +170,24 @@ This repository includes a minimal two-container setup that can be launched on a
 ### How to run
 1. Launch an Ubuntu-based CloudLab node.
 2. Clone this repository.
-3. Run the setup script:
+```bash
+git clone https://github.com/mclark-99/csc581_project1.git
+```
+4. cd into project folder
+```bash
+cd csc581_project1
+ls
+```
+
+5.  Run the setup script:
 
 ```bash
 bash scripts/setup-cloudlab.sh
 ```
 4. Build and start the containers:
 ```bash
-git clone https://github.com/mclark-99/csc581_project1.git
 cd csc581_project1
-docker compose up --build
+docker-compose up --build
 ```
 
 Verify the services:
