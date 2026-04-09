@@ -2,6 +2,7 @@ FROM node:20-alpine
 
 WORKDIR /app
 COPY app.js .
+COPY index.html .
 
 EXPOSE 3000
 
