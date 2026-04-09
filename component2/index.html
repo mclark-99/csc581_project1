@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSC581 Project</title>
+</head>
+<body>
+    <h1>Static Client</h1>
+    <button onclick="getMessage()">Get Message from Backend</button>
+
+    <p id="output"></p>
+
+    <script>
+        async function getMessage() {
+            const res = await fetch("http://component1:8000");
+            const text = await res.text();
+            document.getElementById("output").innerText = text;
+        }
+    </script>
+</body>
+</html>
