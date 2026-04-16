@@ -2,10 +2,9 @@
 
 ## Overview
 
-This repository contains the initial structure and documentation for the project in CSC 581.
-The goal of this project is to design and deploy a multi-component system using containerized services that can be executed in a CloudLab environment.
+This repository contains the implementation and documentation for a multi-component system designed for deployment on CloudLab. The project demonstrates containerization, service isolation, and communication between components using a Static Site + API architecture.
 
-The repository is organized to support reproducible experiments, clear documentation, and future automation for CloudLab deployments. This project follows a “Static Site + API” style architecture, where a client-facing service interacts with a backend API.
+The system consists of a frontend service that interacts with a backend API through HTTP requests. Each component is containerized using Docker and deployed on a CloudLab node.
 
 ---
 
@@ -13,97 +12,107 @@ The repository is organized to support reproducible experiments, clear documenta
 
 The proposed system consists of two containerized components that communicate over a network:
 
-### Component 1 - Client Service
-A lightweight client application responsible for sending requests and displaying responses.
+- A frontend service that serves a static resume-style website
+- A backend API that provides structured data to the frontend
 
-### Component 2 - Backend API Service
-A backend service responsible for processing requests and returning data through a RESTful interface.
-
-The two components will communicate using HTTP REST APIs.
+The frontend dynamically retrieves and displays data from the backend using JavaScript.
 
 ### Architecture Diagram
 ```
-+---------------------+        HTTP REST        +----------------------+
-|   Client Service    |  -------------------->  |   Backend API        |
-|   (component2)      |                         |   (component1)       |
-+---------------------+                         +----------------------+
++---------------------+        HTTP (/api)        +----------------------+
+|   Frontend (Nginx)  |  ---------------------->  |   Backend API        |
+|   Static Website    |                          |   (Flask - Python)   |
++---------------------+                          +----------------------+
 ```
 ---
 
 ## Proposal
 
-This project implements a simple multi-component application using Docker containers to demonstrate containerization, service isolation, and inter-service communication.
+This project implements a simple full-stack application using Docker containers to demonstrate modern web architecture principles.
 
-The system follows a client-server architecture, where a lightweight Node.js client (component2) interacts with a Python-based backend API (component1) over HTTP. Each component is containerized independently, allowing them to run in isolated environments while still communicating through a shared Docker network.
+The system follows a client-server model, where a static frontend served by Nginx interacts with a Python-based backend API built using Flask. The frontend uses JavaScript to fetch data from the API and dynamically render content on the page.
+
+Each component runs in its own container, allowing for separation of concerns and independent scaling.
 
 ## Build Process
 
 This project uses two Dockerfiles, one for each containerized component.
 
-### Component 1 (Backend API - Python)
+### Component 1 (Backend API - Python Flask)
 
 ```dockerfile
-FROM python:3.11-slim        # uses a lightweight Python image to reduce size and improve startup time.
-WORKDIR /app                 # sets the working directory inside the container.
-COPY app.py .                # copies the backend application into the container.
-EXPOSE 8000                  # documents that the container listens on port 8000.
-CMD ["python", "app.py"]     # starts the backend server when the container runs.
+FROM python:3.11-slim
+WORKDIR /app
+COPY app.py .
+RUN pip install flask
+EXPOSE 8000
+CMD ["python", "app.py"]
 ```
 
-### Component 2 (Clientt Service - Node.js)
+### Component 2 (Frontend - Nginx Static Site)
 
 ```dockerfile
-FROM node:20-alpine        # uses a minimal Node.js image for efficiency.
-WORKDIR /app               # sets the working directory inside the container.
-COPY app.js .              # copies the client service code into the contaniner.
-EXPOSE 3000                # documents that the service runs on port 3000.
-CMD ["node", "app.js"]     # starts the Node.js service when the container runs.
+FROM nginx:alpine
+COPY index.html /usr/share/nginx/html/
+COPY script.js /usr/share/nginx/html/
+COPY styles.css /usr/share/nginx/html/
+COPY nginx.conf /etc/nginx/nginx.conf
 ```
 
 ## Base Image Justification
-The selected images (python:3.11-slim and node:20-alpine) were chose for:
-- small size (faster builds and deployment)
-- compatibility woth CoudLab
-- reduced resource usage
-- strong community support
+The selected base images were chosen for efficiency and compatibility
+-python:3.11-slim
+ - Lightweight and optimized for running Python applications
+ - Reduces container size and startup time
+ - Provides a clean environment for Flask API development
+- nginx:alpine
+ - Minimal and fast web server image
+ - Ideal for serving static files
+ - Commonly used in production environments for reverse proxy configurations
+
+These images ensure fast builds, low resource usage, and compatibility with CloudLab environments.
 
 ---
 
 ## Networking
 
-Docker Compose creates a defaut bridge network that allows the containers to communicate with each other.
+Docker Compose creates a default bridge network that allows the containers to communicate internally.
 
 ### Communication
 
-- component1 (backend) runs on port 8000
-- component2 (client) runs on port 3000
-
-Both containers are connected to the same internal Docker network.
+- component1 (backend api) runs on port 8000
+- component2 (frontend: Nginx) runs on port 3000
+- The frontend communicates with the backend via
+```bash
+/api
+```
 
 ### DNS Resolution
 
-Docker automatically provides DNS resolution using service names.
+Docker automatically provides DNS resolution between services using their service names.
 
 This means:
 - `component1` can be accessed using hostname `component1`
 - `component2` can be accessed using hostname `component2`
 
-This removes the need for hardcoded IP addresses/
+This removes the need for hardcoded IP addresses.
 
 ### Port Mapping
 
 Ports are exposed to the CloudLab host:
 
 - `8000:8000` -> backend API
-- `3000:3000` -> client service
-
-This allows testing using:
-
-```bash
-curl localhost:8000
-curl localhost:3000
-```
+- `3000:3000` -> frontend
 ---
+
+## Reverse Proxy Configuration
+Nginx is configured as a reverse proxy to forward API requests:
+```Nginx
+location /api {
+ proxy_pass http://conponent1:8000;
+}
+```
+This allows the frontend to communicate with the backend without directyly exposing backend ports in the browser.
 
 ## Repository Structure
 
@@ -117,16 +126,21 @@ csc581_project1/
 |
 |-- component2/         # Client Service
 |  |-- Dockerfile
-|  |-- README.md
-|  |__ app.js
+|  |-- nginx.conf
+|  |-- index.html
+|  |-- script.js
+|  |-- styles.css
+|  |__ README.md
 |
 |-- docs/
-|  |__diagramls/       # Architecture and system diagrams
+|  |__diagrams/       # Architecture and system diagrams
 |
 |-- resume/            # Professional resume
 |
 |-- scripts/           # Setup and automation scripts
 |  |__ setup-cloudlab.sh
+|
+|-- docker-compose.yml
 |
 |__ README.md         # Project Documentation
 ```
@@ -135,15 +149,18 @@ csc581_project1/
 
 ## CloudLab Readiness
 
-This repository includes a minimal two-container setup that can be launched on a CloudLab Ubuntu node.
+This repository includes a two-container setup that can be launched on a CloudLab Ubuntu node.
 
 ### Files added for CloudLab readiness
-- `component1/Dockerfile`
-- `component1/app.py`
-- `component2/Dockerfile`
-- `component2/app.js`
-- `docker-compose.yml`
-- `scripts/setup-cloudlab.sh`
+- `component1/Dockerfile`     # Builds the Flask backend container
+- `component1/app.py`         # Backend API implementation
+- `component2/Dockerfile`     # Builds the Nginx frontend container
+- `component2/nginx.conf`     # Reverse proxy configuration
+- `component2/index.html`     # Static frontend (resume UI)
+- `component2/script.js`      # Fetches data from backend API
+- `component2/styles.css`     # Styling for frontend UI
+- `docker-compose.yml`        # Defines multi-container setup and networking
+- `scripts/setup-cloudlab.sh` # Automates environment setup on CloudLab
 
 ### How to run
 1. Launch an Ubuntu-based CloudLab node.
@@ -167,18 +184,37 @@ bash scripts/setup-cloudlab.sh
 sudo docker-compose up --build
 ```
 
-6. Verify the services:
+6. Verify the services in a new CloudLab terminal:
 
 ```bash
-curl localhost:8000
+curl localhost:8000/api
 curl localhost:3000
 ```
 
 Expected responses:
 
 ```bash
-Hello from component1 (Python backend)!
-Hello from component2 (Node client/service)!
+{"bio":"Master\u2019s student in Computer Science at West Chester University.","experience":["Lead Bartender - La Scala\u2019s Fire","Web Specialist - Unifeyed LLC","Irish Dance Performer & Instructor"],"name":"Maiti Clark"}
+```
+
+```bash
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Maiti Clark</title>
+</head>
+<body>
+  <h1 id="name">Loading...</h1>
+  <p id="bio"></p>
+
+  <h2>Experience</h2>
+  <ul id="experience"></ul>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
 ```
 
 7. Find Cloudlab Hostname
@@ -215,6 +251,21 @@ http://localhost:3000
 
 Note: Docker container must be running ```bash sudo docker compose up --build``` before running locally
 
+## Design Decisions and Justifications
+ ### Docker and Containerization
+ Docker was used to ensure consistency across environments and to isolate services. This allows each component to run independently while maintaining a reproducible deployment on CloudLab.
+
+ ### Flask (Backend API)
+ Flask was chosen due to its lightweight nature and simplicity for building REST APIs. It allows quick development of endpoints that reutnr JSON data, making it ideal for demonstrating backend functionality.
+
+ ### Nginx (Frontend + Reverse Proxy)
+ Nginx was selected to serve the static frontend and act as a reverse proxy. This approach mirrors real-world deployment patterns and cleanly separates fronend and backend responsibilities.
+
+ ### Static Site + API Architecture
+ This architecture separates presentation from data processing. The frontend handles UI rendering, while the backend manages data, imporving scalability and maintainability.
+
+ ### SSH Port Forwarding
+ SSH tunneling was used to securely access the CludLab deployment from a local browser without exposing ports publicly.
 
 ## Author
 
