@@ -2,27 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>CSC581 Project 1</title>
+  <title>Maiti Clark</title>
 </head>
 <body>
-  <h1>Static Site + API Demo</h1>
-  <p>This page is served by component2 and requests data from component1.</p>
+  <h1 id="name">Loading...</h1>
+  <p id="bio"></p>
 
-  <button onclick="getMessage()">Get Backend Message</button>
+  <h2>Experience</h2>
+  <ul id="experience"></ul>
 
-  <p id="output">No message yet.</p>
+  <script src="script.js"></script>
 
-  <script>
-    async function getMessage() {
-      try {
-        const response = await fetch("/api");
-        const text = await response.text();
-        document.getElementById("output").innerText = text;
-      } catch (error) {
-        document.getElementById("output").innerText =
-          "Request failed: " + error.message;
-      }
-    }
-  </script>
 </body>
 </html>
