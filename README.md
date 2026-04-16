@@ -181,7 +181,39 @@ Hello from component1 (Python backend)!
 Hello from component2 (Node client/service)!
 ```
 
+7. Find Cloudlab Hostname
+ 
+```bash
+hostname -f
+```
+
+Expected response (example):
+```bash
+pcvm604-2.emulab.net
+```
+
+8. Run in a new terminal (locally, not on CloudLab)
+
+```bash
+ssh -L 3000:localhost:3000 <your-username>@<your-cloudlab-hostname>
+```
+
+Example input:
+
+```bash
+ssh -L 3000:localhost:3000 clark_99@pcvm604-2.emulab.net
+```
+
+This uses SSH port forwarding to expose the CloudLab service running on port 3000 to the local machine.
+
+9. Open Browser locally
+
+```bash
+http://localhost:3000
+```
 ---
+
+Note: Docker container must be running ```bash sudo docker compose up --build``` before running locally
 
 
 ## Author
