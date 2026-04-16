@@ -1,3 +1,5 @@
+version: '3'
+
 services:
   component1:
     build: ./component1
