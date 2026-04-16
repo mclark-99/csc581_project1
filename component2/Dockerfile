@@ -4,3 +4,4 @@ COPY index.html /usr/share/nginx/html/
 COPY script.js /usr/share/nginx/html/
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY img /usr/share/nginx/html/img
+COPY styles.css /usr/share/nginx/html/
