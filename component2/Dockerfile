@@ -1,9 +1,5 @@
 FROM node:20-alpine
 
-WORKDIR /app
-COPY app.js .
-COPY index.html .
-
-EXPOSE 3000
-
-CMD ["node", "app.js"]
+COPY index.html /usr/share/nginx/html/
+COPY script.js /usr/share/nginx/html/
+COPY nginx.conf /etc/nginx/nginx.conf
