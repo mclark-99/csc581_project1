@@ -29,7 +29,7 @@ def get_data():
             "Computer-Mediated Communication, Social Media & Participation in an Online World"
         ]
     }
-]
+],
 
         "experience": [
     {
