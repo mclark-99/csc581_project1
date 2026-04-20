@@ -16,7 +16,7 @@
 }
 
 body {
-    background-color: var(--background);
+    background-color: pink !important;
 }
 
 h1 {
