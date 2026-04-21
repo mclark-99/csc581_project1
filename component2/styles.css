@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Rufina:wght@400;700&display=swap');
+
 :root {
   --primary: #C88EA7;
   --secondary: #F5E6EA;
@@ -14,7 +16,7 @@
 }
 
 body {
-    background-color: hotpink !important;
+    background-color: var(--background);
 }
 
 h1 {
