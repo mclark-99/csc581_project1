@@ -22,7 +22,7 @@ h1 {
     color: var(--primary);
     font-family: 'Rufina', serif;
     font-size: 38px;
-    font-weight: 700px;
+    font-weight: 700;
     letter-spacing: 0.5px;
 }
 
@@ -41,7 +41,7 @@ h2 {
     color: var(--text);
     font-family: 'Rufina', serif;
     font-size: 24px;
-    font-weight: 500px;
+    font-weight: 500;
     letter-spacing: 0.5px;
 }
 
@@ -50,7 +50,7 @@ p {
    color: var(--subtext);
    font-family: var(--small-font); 
    font-size: 18px;
-   font-weight: 400px;
+   font-weight: 400;
 }
 
 .bio {
@@ -58,7 +58,7 @@ p {
     font-style: italic;
     font-family: 'Cormorant Garamond', serif;
     color: var(--accent);
-    font-weight: 550px;
+    font-weight: 550;
 }
 
 .main-content {
