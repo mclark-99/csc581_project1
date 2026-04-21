@@ -1,16 +1,6 @@
+body { background: hotpink !important; }
+
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Rufina:wght@400;700&display=swap');
-
-.main-content {
-  border: 3px solid red;
-}
-
-.experience-section {
-  border: 3px solid blue;
-}
-
-.image-section {
-  border: 3px solid green;
-}
 
 :root {
   --primary: #C88EA7;
