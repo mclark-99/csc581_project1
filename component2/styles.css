@@ -13,16 +13,8 @@
   --small-font: 'Inter', sans-serif;
 }
 
-.job {
-  border: 2px solid red;
-}
-
-.edu {
-  border: 2px solid blue;
-}
-
 body {
-    background-color: var(--background);
+    background-color: hotpink !important;
 }
 
 h1 {
