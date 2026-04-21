@@ -123,8 +123,14 @@ p {
   padding-left: 12px;
 }
 
+#education {
+  list-style: none;
+  padding-left: 0;
+}
+
 #education li {
   margin-bottom: 25px;
+  list-style: none;
 }
 
 .edu-header {
