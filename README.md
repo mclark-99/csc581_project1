@@ -267,6 +267,10 @@ Note: Docker container must be running ```bash sudo docker compose up --build```
  ### SSH Port Forwarding
  SSH tunneling was used to securely access the CludLab deployment from a local browser without exposing ports publicly.
 
+
+[![Watch Demo](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://youtu.be/RwlQMWQInWk)
+
+
 ## Author
 
 Mait Clark
